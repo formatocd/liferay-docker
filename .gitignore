@@ -1,0 +1,4 @@
+volumes/liferay/data
+volumes/liferay/deploy
+volumes/liferay/osgi
+volumes/postgres
