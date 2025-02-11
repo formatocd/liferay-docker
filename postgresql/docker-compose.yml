@@ -1,0 +1,50 @@
+name: liferay-postgresql
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: lportal
+      POSTGRES_USER: liferay
+      POSTGRES_PASSWORD: test
+    volumes:
+      - ./volumes/postgres/data:/var/lib/postgresql/data
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U liferay -d lportal"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liferay:
+    image: liferay/portal:7.4.3.129-ga129
+    container_name: postgres-liferay-portal
+    ports:
+      - "18080:8080"
+      - "8010:8010"
+      - "8443:8443"
+      - "11311:11311"
+    environment:
+      LIFERAY_JDPA_ENABLED: "true"
+      JPDA_ADDRESS: "8000"
+      JPDA_TRANSPORT: dt_socket
+      LIFERAY_RETRY_PERIOD_JDBC_PERIOD_ON_PERIOD_STARTUP_PERIOD_DELAY: 10
+      LIFERAY_RETRY_PERIOD_JDBC_PERIOD_ON_PERIOD_STARTUP_PERIOD_MAX_PERIOD_RETRIES: 10
+      #LIFERAY_JVM_OPTS: "-Xms4096 -Xmx8192m --add-opens java.base/java.lang.invoke=ALL-UNNAMED"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./volumes/liferay/deploy:/opt/liferay/deploy
+      - ./volumes/liferay/data:/opt/liferay/data
+      - ./volumes/liferay/portal-ext.properties:/opt/liferay/portal-ext.properties
+      - ./volumes/liferay/osgi/modules:/opt/liferay/osgi/modules
+      - ./volumes/liferay/osgi/war:/opt/liferay/osgi/war
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge

@@ -1,4 +1,9 @@
-volumes/liferay/data
-volumes/liferay/deploy
-volumes/liferay/osgi
-volumes/postgres
+mysql/volumes/liferay/data
+mysql/volumes/liferay/deploy
+mysql/volumes/liferay/osgi
+mysql/volumes/mysql/data
+postgresql/volumes/liferay/data
+postgresql/volumes/liferay/deploy
+postgresql/volumes/liferay/osgi
+postgresql/volumes/postgres/data
+
