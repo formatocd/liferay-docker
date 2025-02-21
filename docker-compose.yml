@@ -1,29 +1,27 @@
-name: liferay-mysql
+name: liferay-psql
 services:
-  mysql:
-    image: mysql:8.0-oracle
-    container_name: mysql-db
+  postgres:
+    image: postgres:16
+    container_name: psql-db
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: lportal
-      MYSQL_USER: liferay
-      MYSQL_PASSWORD: test
-      MYSQL_ROOT_PASSWORD: root
+      POSTGRES_DB: lportal
+      POSTGRES_USER: liferay
+      POSTGRES_PASSWORD: test
     volumes:
-      - ./volumes/mysql/data:/var/lib/mysql
-      - ./volumes/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./volumes/postgres/data:/var/lib/postgresql/data
     networks:
       - default
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "liferay", "-ptest"]
+      test: ["CMD-SHELL", "pg_isready -U liferay -d lportal"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   liferay:
     image: liferay/portal:7.4.3.129-ga129
-    container_name: mysql-liferay-portal
+    container_name: psql-liferay-portal
     ports:
       - "18080:8080"
       - "8010:8010"
@@ -35,8 +33,9 @@ services:
       JPDA_TRANSPORT: dt_socket
       LIFERAY_RETRY_PERIOD_JDBC_PERIOD_ON_PERIOD_STARTUP_PERIOD_DELAY: 10
       LIFERAY_RETRY_PERIOD_JDBC_PERIOD_ON_PERIOD_STARTUP_PERIOD_MAX_PERIOD_RETRIES: 10
+      #LIFERAY_JVM_OPTS: "-Xms4096 -Xmx8192m --add-opens java.base/java.lang.invoke=ALL-UNNAMED"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
     volumes:
       - ./volumes/liferay/deploy:/opt/liferay/deploy
@@ -46,7 +45,6 @@ services:
       - ./volumes/liferay/osgi/war:/opt/liferay/osgi/war
     networks:
       - default
-
 networks:
   default:
     driver: bridge

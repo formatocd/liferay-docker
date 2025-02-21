@@ -11,21 +11,12 @@ This project sets up a Liferay Portal with PostgreSQL or MySQL environment using
      git clone https://github.com/yourusername/liferay-docker.git
      cd liferay-docker
      ```
-2. Access to `mysql` for MySQL version or access `postgresql` for PostgreSQL versión
-     ```sh
-     cd mysql
-     ```
-     Or
-     ```sh
-     cd postgresql
-     ```
-
-3. Start the container:
+2. Start the container:
      ```sh
      docker-compose up -d
      ```
 
-4. Access Liferay at [http://localhost:18080](http://localhost:18080).
+3. Access Liferay at [http://localhost:18080](http://localhost:18080).
 
 ## Stopping the Services
 
