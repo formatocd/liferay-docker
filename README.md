@@ -8,7 +8,7 @@ This project sets up a Liferay Portal with PostgreSQL or MySQL environment using
 ## Usage
 1. Clone the repository:
      ```sh
-     git clone https://github.com/yourusername/liferay-docker.git
+     git clone https://github.com/formatocd/liferay-docker.git
      cd liferay-docker
      ```
 2. Start the container:

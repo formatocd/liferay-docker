@@ -20,7 +20,7 @@ services:
       retries: 5
 
   liferay:
-    image: liferay/portal:7.4.3.129-ga129
+    image: liferay/portal:7.4.3.132-ga132
     container_name: psql-liferay-portal
     ports:
       - "18080:8080"
